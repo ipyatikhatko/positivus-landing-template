@@ -1,7 +1,9 @@
 import "../styles/main.scss";
+import home from "./modules/home";
 
 // Your JavaScript code here
 console.log("Website loaded!");
+home.heroAnimation();
 
 if (module.hot) {
   module.hot.accept();
