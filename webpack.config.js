@@ -31,7 +31,8 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, "dist"),
     filename: isDevelopment ? "js/[name].js" : "js/[name].[contenthash].js",
-    publicPath: isDevelopment ? "/" : "./",
+    publicPath: "/",
+    assetModuleFilename: "assets/[name][ext]",
   },
 
   devServer: {
@@ -142,9 +143,8 @@ module.exports = {
     new CopyWebpackPlugin({
       patterns: [
         {
-          from: "src/assets",
-          to: "assets",
-          noErrorOnMissing: true,
+          from: "src/assets/fonts",
+          to: "assets/fonts",
         },
       ],
     }),
@@ -176,6 +176,7 @@ module.exports = {
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "src/"),
+      "@assets": path.resolve(__dirname, "src/assets/"),
     },
   },
 };
