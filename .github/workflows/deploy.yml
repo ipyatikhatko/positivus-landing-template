@@ -23,8 +23,21 @@ jobs:
           username: root
           key: ${{ secrets.SSH_KEY }}
           script: |
-            cd /var/www/apps/positivus
-            git pull origin main
+            # Create directory if it doesn't exist
+            mkdir -p /var/www/apps/positivus
+
+            # Clone or pull repository
+            if [ -d "/var/www/apps/positivus/.git" ]; then
+              cd /var/www/apps/positivus
+              git fetch --all
+              git reset --hard origin/main
+            else
+              cd /var/www/apps
+              git clone https://github.com/ipyatikhatko/positivus-landing-template.git positivus
+              cd positivus
+            fi
+
+            # Build and run Docker
             docker stop positivus || true
             docker rm positivus || true
             docker build -t positivus .
