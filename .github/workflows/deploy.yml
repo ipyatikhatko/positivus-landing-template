@@ -16,24 +16,31 @@ jobs:
         with:
           token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
 
-      - name: Deploy to DigitalOcean
+      - name: Update Repository
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.HOST }}
           username: root
           key: ${{ secrets.SSH_KEY }}
           script: |
-            # Ensure directory exists
-            mkdir -p /var/www/apps/positivus
+            if [ -d "/var/www/apps/positivus/.git" ]; then
+              cd /var/www/apps/positivus
+              git fetch origin
+              git reset --hard origin/main
+            else
+              mkdir -p /var/www/apps/positivus
+              cd /var/www/apps/positivus
+              git clone https://github.com/ipyatikhatko/positivus-landing-template.git .
+            fi
 
-            # Remove everything including hidden files
+      - name: Deploy with Docker
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: root
+          key: ${{ secrets.SSH_KEY }}
+          script: |
             cd /var/www/apps/positivus
-            rm -rf .* * || true
-
-            # Clone fresh copy
-            git clone https://github.com/ipyatikhatko/positivus-landing-template.git .
-
-            # Build and run Docker
             docker stop positivus || true
             docker rm positivus || true
             docker build -t positivus .
