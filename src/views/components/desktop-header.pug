@@ -1,7 +1,7 @@
 - const isProd = process.env.NODE_ENV === 'production'
 - const getLink = (path) => path === '/' ? '/' : isProd ? `/${path}` : `/${path}.html`
 
-header.header
+div.desktop-header
   nav.nav.container
     a.nav__logo(href=getLink('/'))
       img(src=require('../../assets/header-logo.svg') alt="Logo")

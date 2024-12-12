@@ -1,0 +1,20 @@
+@use "@/styles/base/variables" as *;
+
+// mobile first styles
+.desktop-header {
+  display: none;
+}
+
+@media (width >= $breakpoint-md) {
+  .desktop-header {
+    display: block;
+  }
+
+  .mobile-header {
+    display: none;
+  }
+
+  .mobile-nav {
+    display: none;
+  }
+}

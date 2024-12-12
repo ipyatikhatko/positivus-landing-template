@@ -1,11 +1,19 @@
 doctype html
 html(lang="en")
+  block vars
+    - const pageTitle = 'Default Title'
   head
     meta(charset="UTF-8")
     meta(name="viewport" content="width=device-width, initial-scale=1.0")
-    title #{title} | My Website
+    title #{pageTitle} | Positivus
   body
-    include ../components/header.pug
+    include ../components/mobile-nav.pug
+
+    header.header
+      .header__desktop
+        include ../components/desktop-header.pug
+      .header__mobile
+        include ../components/mobile-header.pug
     
     main(class="container")
       block content 
