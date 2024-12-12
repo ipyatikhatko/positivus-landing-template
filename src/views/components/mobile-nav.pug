@@ -1,0 +1,21 @@
+- const isProd = process.env.NODE_ENV === 'production'
+- const getLink = (path) => path === '/' ? '/' : isProd ? `/${path}` : `/${path}.html`
+
+aside(data-open="false" class="mobile-nav")
+  div.mobile-nav__container 
+    button(class="mobile-nav__close-button")
+      include ../../assets/x.svg
+    ul.mobile-nav__list
+      li.mobile-nav__item
+        a(href=getLink('/')) Home
+      li.mobile-nav__item
+        a(href=getLink('about')) About us
+      li.mobile-nav__item
+        a(href=getLink('services')) Services
+      li.mobile-nav__item
+        a(href=getLink('use-cases')) Use Cases
+      li.mobile-nav__item
+        a(href=getLink('pricing')) Pricing
+      li.mobile-nav__item
+        a(href=getLink('blog')) Blog
+  

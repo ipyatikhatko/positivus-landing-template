@@ -1,40 +1,85 @@
+@use "../mixins/breakpoints" as *;
+@use "../mixins/layout" as *;
 @use "../base/variables" as *;
 
 .hero {
-  padding-top: 70px;
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  @include container;
+  display: grid;
+  padding-top: 35px;
+  gap: 1rem;
 
-  &__info {
-    max-width: 531px;
-    display: flex;
-    flex-direction: column;
-    gap: 35px;
+  // Mobile first
+  grid-template-columns: 1fr;
+  grid-template-areas:
+    "title"
+    "description"
+    "image"
+    "button";
+
+  @include desktop {
+    grid-template-columns: minmax(auto, 531px) 1fr;
+    grid-template-areas:
+      "title image"
+      "description image"
+      "button image";
+    gap: 2rem 4rem;
+    padding-top: 70px;
   }
 
   &__title {
+    grid-area: title;
     color: $text-color;
+    font-size: 2.2rem;
+
+    @include tablet {
+      font-size: 2.8rem;
+    }
+
+    @include desktop {
+      font-size: 3.75rem;
+    }
+  }
+
+  &__description {
+    grid-area: description;
   }
 
   &__button {
+    grid-area: button;
     display: inline-block;
-    width: fit-content;
     font-size: 20px;
     color: white;
     background-color: $secondary-color;
-    padding: 20px 35px;
+    width: 100%;
+    max-width: 300px;
+    font-size: 18px;
+    padding: 15px 30px;
     border-radius: 14px;
+    text-align: center;
+    margin: 0 auto;
+
+    @include desktop {
+      padding: 20px 35px;
+      border-radius: 14px;
+      font-size: 16px;
+      width: fit-content;
+      text-align: start;
+      margin: 0;
+    }
   }
 
   &__image {
-    flex: 1;
-    display: flex;
-    justify-content: end;
+    grid-area: image;
+    @include grid-center;
+
+    @include desktop {
+      justify-content: end;
+    }
 
     & svg {
       overflow: visible;
+      max-width: 100%;
+      height: auto;
     }
   }
 }

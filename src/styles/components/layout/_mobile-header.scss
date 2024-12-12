@@ -1,0 +1,28 @@
+.mobile-header {
+  height: 50px;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  &__logo {
+    display: grid;
+    place-items: center;
+    img {
+      width: 100px;
+    }
+
+    & a {
+      display: grid;
+    }
+  }
+
+  &__menu-button {
+    display: grid;
+    place-items: center;
+    appearance: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+}

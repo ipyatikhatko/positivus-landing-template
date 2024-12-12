@@ -3,7 +3,8 @@
 @use "components/styles";
 @use "base/fonts";
 @use "base/typography";
-
+@use "mixins/breakpoints";
+@use "mixins/layout" as *;
 @use "pages/home";
 
 body {
@@ -13,7 +14,5 @@ body {
 }
 
 .container {
-  max-width: 1240px;
-  margin: 0 auto;
-  padding: 0 15px;
+  @include container;
 }
