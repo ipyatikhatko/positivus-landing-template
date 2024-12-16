@@ -1,0 +1,22 @@
+@use "@/styles/base/variables" as *;
+@use "@/styles/mixins/breakpoints" as *;
+@use "@/styles/mixins/layout" as *;
+
+.services {
+  &__container {
+  }
+
+  &__content {
+    text-align: center;
+  }
+
+  &__title {
+    margin-bottom: 1rem;
+  }
+
+  &__description {
+    color: $text-color;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+}

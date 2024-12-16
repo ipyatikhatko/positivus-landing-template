@@ -7,13 +7,13 @@ html(lang="en")
     meta(name="viewport" content="width=device-width, initial-scale=1.0")
     title #{pageTitle} | Positivus
   body
-    include ../components/mobile-nav.pug
+    include ./components/mobile-nav.pug
 
     header.header
       .header__desktop
-        include ../components/desktop-header.pug
+        include ./components/desktop-header.pug
       .header__mobile
-        include ../components/mobile-header.pug
+        include ./components/mobile-header.pug
     
     main(class="container")
       block content 

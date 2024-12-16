@@ -13,10 +13,21 @@ const getPugPages = () => {
   const pagesDir = "./src/views/pages";
   return fs
     .readdirSync(pagesDir)
-    .filter((fileName) => fileName.endsWith(".pug"))
+    .filter((fileName) => {
+      const filePath = path.join(pagesDir, fileName);
+      return fs.statSync(filePath).isDirectory();
+    })
     .map((fileName) => ({
-      template: path.join(pagesDir, fileName),
-      filename: fileName.replace(".pug", ".html"),
+      template: path.join(pagesDir, fileName, "index.pug"),
+      filename: fileName === "home" ? "index.html" : `${fileName}.html`,
+      templateParameters: {
+        isDevelopment,
+        getLink: (path) => {
+          if (path === "/") return "/";
+          return isDevelopment ? `/${path}.html` : `/${path}`;
+        },
+        require: require,
+      },
     }));
 };
 
@@ -39,31 +50,31 @@ module.exports = {
     static: {
       directory: path.join(__dirname, "dist"),
     },
+    devMiddleware: {
+      publicPath: "/",
+    },
     compress: true,
     port: 3000,
     hot: true,
+    open: true,
     watchFiles: {
       paths: ["src/**/*.pug", "src/**/*.scss"],
       options: {
         usePolling: true,
       },
     },
-    liveReload: true,
-    historyApiFallback: true,
   },
 
   module: {
     rules: [
       {
         test: /\.pug$/,
-        use: [
-          {
-            loader: "pug-loader",
-            options: {
-              pretty: isDevelopment,
-            },
-          },
-        ],
+        loader: "pug-loader",
+        options: {
+          root: path.resolve(__dirname, "src"),
+          basedir: path.resolve(__dirname, "src"),
+          pretty: true,
+        },
       },
       {
         test: /\.scss$/,
@@ -94,7 +105,10 @@ module.exports = {
           {
             loader: "sass-loader",
             options: {
-              sourceMap: isDevelopment,
+              sassOptions: {
+                includePaths: [path.resolve(__dirname, "src")],
+              },
+              additionalData: `@use "sass:math"; @use "@/styles/base/variables" as *;`,
             },
           },
         ],
@@ -111,6 +125,7 @@ module.exports = {
         type: "asset/resource",
         generator: {
           filename: "assets/fonts/[name][ext]",
+          publicPath: "/",
         },
       },
     ],
@@ -124,20 +139,20 @@ module.exports = {
         filename: "css/[name].[contenthash].css",
         chunkFilename: "css/[id].[contenthash].css",
       }),
+    new webpack.DefinePlugin({
+      "process.env.NODE_ENV": JSON.stringify(
+        process.env.NODE_ENV || "development"
+      ),
+      isDevelopment: isDevelopment,
+    }),
     // Dynamically create HtmlWebpackPlugin instances
     ...getPugPages().map(
-      ({ template, filename }) =>
+      ({ template, filename, templateParameters }) =>
         new HtmlWebpackPlugin({
           template,
           filename,
           minify: !isDevelopment,
-          templateParameters: {
-            process: {
-              env: {
-                NODE_ENV: process.env.NODE_ENV,
-              },
-            },
-          },
+          templateParameters,
         })
     ),
     new CopyWebpackPlugin({
@@ -175,8 +190,11 @@ module.exports = {
 
   resolve: {
     alias: {
-      "@": path.resolve(__dirname, "src/"),
-      "@assets": path.resolve(__dirname, "src/assets/"),
+      "@": path.resolve(__dirname, "src"),
+      "@layouts": path.resolve(__dirname, "src/views/layout"),
+      "@components": path.resolve(__dirname, "src/views/components"),
+      "@assets": path.resolve(__dirname, "src/assets"),
+      "@views": path.resolve(__dirname, "src/views"),
     },
   },
 };

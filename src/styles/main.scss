@@ -1,16 +1,17 @@
 @use "base/reset";
-@use "base/variables";
-@use "components/styles";
-@use "base/fonts";
+@use "base/variables" as *;
 @use "base/typography";
-@use "mixins/breakpoints";
+@use "base/fonts";
+@use "mixins/breakpoints" as *;
 @use "mixins/layout" as *;
-@use "pages/home";
+
+@use "../views/pages/home";
+@use "../views/pages/about";
 
 body {
-  font-family: "SpaceGrotesk", sans-serif;
-  line-height: 1.6;
-  color: #333;
+  font-family: $font-family-base;
+  line-height: $line-height-base;
+  color: $text-color;
 }
 
 .container {
